@@ -18,6 +18,7 @@ namespace MovieAPI.Controllers
             this.movieService = movieService;
         }
 
+        [Authorize]
         [HttpGet("get-all-movies")]
         public async Task<IActionResult> GetAllMovies()
         {
@@ -99,7 +100,7 @@ namespace MovieAPI.Controllers
             return Ok(comments);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("write-comment/{movieId}")]
         public async Task<IActionResult> CommentMovie(int movieId, AddCommentDTO commentToAdd)
         {
@@ -123,7 +124,7 @@ namespace MovieAPI.Controllers
             return null;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("rate-movie/{movieId}")]
         public async Task<IActionResult> RateMovie(int movieId, int rating)
         {
@@ -149,7 +150,7 @@ namespace MovieAPI.Controllers
             return null;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("update-comment")]
         public async Task<IActionResult> UpdateComment(int commentId, UpdateCommentDTO updates)
         {
@@ -166,7 +167,7 @@ namespace MovieAPI.Controllers
             return BadRequest();
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("delete-comment")]
         public async Task<IActionResult> DeleteComment(int commentid)
         {
@@ -177,7 +178,7 @@ namespace MovieAPI.Controllers
             }
             return BadRequest();
         }
-        [Authorize]
+        //[Authorize]
         [HttpPut("update-rating")]
         public async Task<IActionResult> UpdateReview(int ratingId, int rating)
         {

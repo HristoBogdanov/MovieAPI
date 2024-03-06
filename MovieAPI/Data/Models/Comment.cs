@@ -11,7 +11,7 @@ namespace MovieAPI.Data.Models
         
         [ForeignKey(nameof(User))]
         public string UserId { get; set; } = null!;
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
         
         [MaxLength(CommentMaxLength)]
         public string Description { get; set; } = null!;
