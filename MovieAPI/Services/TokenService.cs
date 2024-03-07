@@ -7,16 +7,29 @@ using System.Text;
 
 namespace MovieAPI.Services
 {
+    /// <summary>
+    /// Service responsible for generating JWT tokens for user authentication.
+    /// </summary>
     public class TokenService : ITokenService
     {
         private readonly IConfiguration configuration;
         private readonly SymmetricSecurityKey key;
+
+        /// <summary>
+        /// Initializes a new instance of the TokenService class.
+        /// </summary>
+        /// <param name="config">The configuration settings for JWT token generation.</param>
         public TokenService(IConfiguration config)
         {
             this.configuration = config;
             this.key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SigningKey"]));
         }
 
+        /// <summary>
+        /// Creates a JWT token for the specified user.
+        /// </summary>
+        /// <param name="user">The user for whom the token is generated.</param>
+        /// <returns>Returns the generated JWT token.</returns>
         public string CreateToken(ApplicationUser user)
         {
             var claims = new List<Claim>()
