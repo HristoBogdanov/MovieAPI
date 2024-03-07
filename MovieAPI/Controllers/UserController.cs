@@ -1,20 +1,34 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using MovieAPI.Data.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using MovieAPI.Services.Interfaces;
 using MovieAPI.ViewModels;
 using System.Security.Claims;
 
 namespace MovieAPI.Controllers
 {
+    /// <summary>
+    /// Controller for managing user-related actions such as login, registration, and retrieving user comments and ratings.
+    /// </summary>
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserController : Controller
     {
         private readonly IUserService userService;
+
+        /// <summary>
+        /// Initializes a new instance of the UserController class.
+        /// </summary>
+        /// <param name="userService">The user service for interacting with user data.</param>
         public UserController(IUserService userService)
         {
             this.userService = userService;
         }
 
+
+        /// <summary>
+        /// Endpoint for user login.
+        /// </summary>
+        /// <param name="login">The login credentials provided by the user.</param>
+        /// <returns>Returns the result of the login attempt.</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO login)
         {
@@ -41,6 +55,12 @@ namespace MovieAPI.Controllers
             return Ok(loggedUser);
         }
 
+
+        /// <summary>
+        /// Endpoint for user registration.
+        /// </summary>
+        /// <param name="register">The registration data provided by the user.</param>
+        /// <returns>Returns the result of the registration attempt.</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO register)
         {
@@ -68,6 +88,11 @@ namespace MovieAPI.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Endpoint for retrieving all comments made by the user.
+        /// </summary>
+        /// <returns>Returns the comments made by the user.</returns>
         [HttpGet("get-all-comments")]
         public async Task<IActionResult> GetAllUserComments()
         {
@@ -79,7 +104,12 @@ namespace MovieAPI.Controllers
 
             return Ok(comments);
         }
-        
+
+
+        /// <summary>
+        /// Endpoint for retrieving all ratings made by the user.
+        /// </summary>
+        /// <returns>Returns the ratings made by the user.</returns>
         [HttpGet("get-all-ratings")]
         public async Task<IActionResult> GetAllUserRatings()
         {
