@@ -7,16 +7,33 @@ using MovieAPI.ViewModels;
 
 namespace MovieAPI.Services
 {
+    /// <summary>
+    /// Service class responsible for handling movie-related operations.
+    /// </summary>
     public class MovieService : IMovieService
     {
         private readonly DataContext context;
         private readonly IWebHostEnvironment webHostEnvironment;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MovieService"/> class.
+        /// </summary>
+        /// <param name="context">The DataContext.</param>
+        /// <param name="webHostEnvironment">The IWebHostEnvironment.</param>
         public MovieService(DataContext context, IWebHostEnvironment webHostEnvironment)
         {
             this.context = context;
             this.webHostEnvironment = webHostEnvironment;
         }
 
+
+        /// <summary>
+        /// Adds a comment to a movie.
+        /// </summary>
+        /// <param name="comment">The comment to add.</param>
+        /// <param name="userId">The ID of the user adding the comment.</param>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <returns>The added comment.</returns>
         public async Task<Comment> AddComment(AddCommentDTO comment, string userId, int movieId)
         {
             var existingComment = await context.Comments
@@ -48,6 +65,12 @@ namespace MovieAPI.Services
             return commentToAdd;
         }
 
+
+        /// <summary>
+        /// Adds a movie to the database.
+        /// </summary>
+        /// <param name="movie">The movie to add.</param>
+        /// <returns>The added movie.</returns>
         public async Task<Movie> AddMovie(AddMovieDTO movie)
         {
             var movies = await context.Movies.ToListAsync();
@@ -89,6 +112,14 @@ namespace MovieAPI.Services
             return movieToAdd;
         }
 
+
+        /// <summary>
+        /// Adds a rating to a movie.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <param name="rating">The rating to add.</param>
+        /// <param name="userId">The ID of the user adding the rating.</param>
+        /// <returns>True if the rating is added successfully; otherwise, false.</returns>
         public async Task<bool> AddRating(int movieId, int rating, string userId)
         {
             var movieRatings = await context.MoviesRatings.Include(mr => mr.Rating).ToListAsync();
@@ -115,6 +146,12 @@ namespace MovieAPI.Services
             return true;
         }
 
+
+        /// <summary>
+        /// Deletes a comment from the database.
+        /// </summary>
+        /// <param name="commentId">The ID of the comment to delete.</param>
+        /// <returns>True if the comment is deleted successfully; otherwise, false.</returns>
         public async Task<bool> DeleteComment(int commentId)
         {
             var comment = await context.Comments.FindAsync(commentId);
@@ -127,6 +164,12 @@ namespace MovieAPI.Services
             return false;
         }
 
+
+        /// <summary>
+        /// Deletes a movie from the database.
+        /// </summary>
+        /// <param name="id">The ID of the movie to delete.</param>
+        /// <returns>True if the movie is deleted successfully; otherwise, false.</returns>
         public async Task<bool> DeleteMovie(int id)
         {
             var movie = await context.Movies.FindAsync(id);
@@ -139,6 +182,11 @@ namespace MovieAPI.Services
             return false;
         }
 
+
+        /// <summary>
+        /// Retrieves all movies from the database.
+        /// </summary>
+        /// <returns>A list of GetAllMoviesDTO objects representing all movies in the database.</returns>
         public async Task<List<GetAllMoviesDTO>> GetAllMovies()
         {
             var movies = await context.Movies.Select(movie => new GetAllMoviesDTO
@@ -160,6 +208,12 @@ namespace MovieAPI.Services
             return movies;
         }
 
+
+        /// <summary>
+        /// Retrieves a movie by its ID from the database.
+        /// </summary>
+        /// <param name="id">The ID of the movie to retrieve.</param>
+        /// <returns>A GetAllMoviesDTO object representing the retrieved movie.</returns>
         public async Task<GetAllMoviesDTO> GetMovie(int id)
         {
             var movie = await context.Movies.Where(m => m.Id == id).Select(movie => new GetAllMoviesDTO
@@ -181,6 +235,12 @@ namespace MovieAPI.Services
             return movie;
         }
 
+
+        /// <summary>
+        /// Retrieves movies by name from the database.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <returns>A list of GetAllMoviesDTO objects representing the retrieved movies.</returns>
         public async Task<List<GetAllMoviesDTO>> GetMovieByName(string name)
         {
             var movies = await context.Movies.Where(m => m.Name.ToLower().Contains(name.ToLower())).Select(m => new GetAllMoviesDTO
@@ -202,6 +262,12 @@ namespace MovieAPI.Services
             return movies;
         }
 
+
+        /// <summary>
+        /// Retrieves comments of a movie from the database.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <returns>A list of GetAllMovieCommentsDTO objects representing the comments of the movie.</returns>
         public async Task<List<GetAllMovieCommentsDTO>> GetMovieComments(int movieId)
         {
             var movie = await context.Movies.FindAsync(movieId);
@@ -220,6 +286,11 @@ namespace MovieAPI.Services
             return comments;
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by release date in ascending order.
+        /// </summary>
+        /// <returns>A list of GetAllMoviesDTO objects representing the retrieved movies.</returns>
         public async Task<List<GetAllMoviesDTO>> GetOrderedMovieByReleaseDateAsc()
         {
             var movies = await context.Movies.Select(m => new GetAllMoviesDTO
@@ -241,6 +312,11 @@ namespace MovieAPI.Services
             return movies;
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by release date in descending order.
+        /// </summary>
+        /// <returns>A list of GetAllMoviesDTO objects representing the retrieved movies.</returns>
         public async Task<List<GetAllMoviesDTO>> GetOrderedMovieByReleaseDateDesc()
         {
             var movies = await context.Movies.Select(m => new GetAllMoviesDTO
@@ -262,6 +338,11 @@ namespace MovieAPI.Services
             return movies;
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by name in ascending order.
+        /// </summary>
+        /// <returns>A list of GetAllMoviesDTO objects representing the retrieved movies.</returns>
         public async Task<List<GetAllMoviesDTO>> GetOrderedMovieByNameAsc()
         {
             var movies = await context.Movies.Select(m => new GetAllMoviesDTO
@@ -283,6 +364,11 @@ namespace MovieAPI.Services
             return movies;
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by name in descending order.
+        /// </summary>
+        /// <returns>A list of GetAllMoviesDTO objects representing the retrieved movies.</returns>
         public async Task<List<GetAllMoviesDTO>> GetOrderedMovieByNameDesc()
         {
             var movies = await context.Movies.Select(m => new GetAllMoviesDTO
@@ -304,6 +390,14 @@ namespace MovieAPI.Services
             return movies;
         }
 
+
+        /// <summary>
+        /// Updates a comment in the database.
+        /// </summary>
+        /// <param name="commentId">The ID of the comment to update.</param>
+        /// <param name="userId">The ID of the user updating the comment.</param>
+        /// <param name="updates">The updated comment data.</param>
+        /// <returns>The updated comment.</returns>
         public async Task<Comment> UpdateComment(int commentId, string userId, UpdateCommentDTO updates)
         {
             var commentToUpdate = await context.Comments.Where(c => c.Id == commentId && c.UserId == userId).FirstOrDefaultAsync();
@@ -320,6 +414,13 @@ namespace MovieAPI.Services
             return commentToUpdate;
         }
 
+
+        /// <summary>
+        /// Updates a movie in the database.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie to update.</param>
+        /// <param name="updates">The updated movie data.</param>
+        /// <returns>The updated movie.</returns>
         public async Task<Movie> UpdateMovie(int movieId, UpdateMovieDTO updates)
         {
             var movieToUpdate = await context.Movies.FindAsync(movieId);
@@ -373,6 +474,14 @@ namespace MovieAPI.Services
             return movieToUpdate;
         }
 
+
+        /// <summary>
+        /// Updates a rating in the database.
+        /// </summary>
+        /// <param name="ratingId">The ID of the rating to update.</param>
+        /// <param name="userId">The ID of the user updating the rating.</param>
+        /// <param name="rating">The new rating value.</param>
+        /// <returns>The updated rating.</returns>
         public async Task<Rating> UpdateRating(int ratingId, string userId, int rating)
         {
             var ratingToUpdate = await context.Ratings.Where(r => r.Id == ratingId && r.UserId == userId).FirstOrDefaultAsync();
@@ -393,6 +502,13 @@ namespace MovieAPI.Services
             return null;
         }
 
+
+        /// <summary>
+        /// Deletes an image associated with a movie from the database.
+        /// </summary>
+        /// <param name="imageId">The ID of the image to delete.</param>
+        /// <param name="movieId">The ID of the movie associated with the image.</param>
+        /// <returns>True if the image is deleted successfully; otherwise, false.</returns>
         public async Task<bool> DeleteImage(int imageId, int movieId)
         {
             var image = await context.Images.FindAsync(imageId);
@@ -410,6 +526,15 @@ namespace MovieAPI.Services
             return false;
         }
 
+
+        //Private methods
+
+
+        /// <summary>
+        /// Checks if an uploaded image file is valid.
+        /// </summary>
+        /// <param name="file">The uploaded image file.</param>
+        /// <returns>True if the image is valid; otherwise, false.</returns>
         private bool IsImageValid(IFormFile file)
         {
             var extension = Path.GetExtension(file.FileName).ToLower();
@@ -418,11 +543,24 @@ namespace MovieAPI.Services
             return file != null && file.Length > 0 && validExtensions.Contains(extension);
         }
 
+
+        /// <summary>
+        /// Generates a unique file name for an uploaded image file.
+        /// </summary>
+        /// <param name="file">The uploaded image file.</param>
+        /// <returns>The unique file name.</returns>
         private string GetUniqueFileName(IFormFile file)
         {
             return $"{Guid.NewGuid()}_{file.FileName}";
         }
 
+
+        /// <summary>
+        /// Saves an uploaded image file to the server.
+        /// </summary>
+        /// <param name="file">The uploaded image file.</param>
+        /// <param name="uniqueFileName">The unique file name.</param>
+        /// <returns>The URL of the saved image file.</returns>
         private string SaveImageToFile(IFormFile file, string uniqueFileName)
         {
             var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Movies");
@@ -441,6 +579,13 @@ namespace MovieAPI.Services
             return $"http://localhost:5099/Images/Movies/{uniqueFileName}";
         }
 
+
+        /// <summary>
+        /// Saves an image record to the database.
+        /// </summary>
+        /// <param name="filePath">The file path of the saved image.</param>
+        /// <param name="context">The DataContext.</param>
+        /// <returns>The saved Image object.</returns>
         private async Task<Image> SaveImageToDatabase(string filePath, DataContext context)
         {
             var image = new Image { Path = filePath };
@@ -450,6 +595,14 @@ namespace MovieAPI.Services
             return image;
         }
 
+
+        /// <summary>
+        /// Saves a movie-image association to the database.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <param name="imageId">The ID of the image.</param>
+        /// <param name="context">The DataContext.</param>
+        /// <returns></returns>
         private async Task SaveMovieImageToDatabase(int movieId, int imageId, DataContext context)
         {
             var movieImage = new MoviesImages { MovieId = movieId, ImageId = imageId };
