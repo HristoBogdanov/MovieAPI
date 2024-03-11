@@ -1,23 +1,34 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using MovieAPI.Data.Models;
 using MovieAPI.Services.Interfaces;
 using MovieAPI.ViewModels;
 using System.Security.Claims;
 
 namespace MovieAPI.Controllers
 {
+
+    /// <summary>
+    /// Controller class responsible for handling movie-related HTTP requests.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class MovieController : ControllerBase
     {
         private readonly IMovieService movieService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MovieController"/> class.
+        /// </summary>
+        /// <param name="movieService">The movie service instance.</param>
         public MovieController(IMovieService movieService)
         {
             this.movieService = movieService;
         }
 
+        /// <summary>
+        /// Retrieves all movies from the database.
+        /// </summary>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("get-all-movies")]
         public async Task<IActionResult> GetAllMovies()
         {
@@ -30,6 +41,12 @@ namespace MovieAPI.Controllers
             return Ok(movies);
         }
 
+
+        /// <summary>
+        /// Retrieves a movie by its ID from the database.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("get-movie/{movieId}")]
         public async Task<IActionResult> GetMovie([FromRoute]int movieId)
         {
@@ -43,6 +60,12 @@ namespace MovieAPI.Controllers
             return Ok(movie);
         }
 
+
+        /// <summary>
+        /// Adds a movie to the database.
+        /// </summary>
+        /// <param name="movie">The movie data to add.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize(Roles = "Admin")]
         [HttpPost("create-movie")]
         public async Task<IActionResult> AddMovie([FromForm]AddMovieDTO movie)
@@ -56,6 +79,13 @@ namespace MovieAPI.Controllers
             return BadRequest();
         }
 
+
+        /// <summary>
+        /// Updates a movie in the database.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie to update.</param>
+        /// <param name="updates">The updated movie data.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize(Roles = "Admin")]
         [HttpPut("update-movie/{movieId}")]
         public async Task<IActionResult> UpdateMovie([FromRoute]int movieId, [FromForm]UpdateMovieDTO updates)
@@ -73,6 +103,12 @@ namespace MovieAPI.Controllers
             return BadRequest();
         }
 
+
+        /// <summary>
+        /// Deletes a movie from the database.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie to delete.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize(Roles = "Admin")]
         [HttpDelete("delete-movie/{movieId}")]
         public async Task<IActionResult> DeleteMovie([FromRoute]int movieId)
@@ -85,6 +121,12 @@ namespace MovieAPI.Controllers
             return BadRequest();
         }
 
+
+        /// <summary>
+        /// Retrieves all comments of a movie from the database.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("get-all-movie-comments/{movieId}")]
         public async Task<IActionResult> GetAllMovieComments([FromRoute] int movieId)
         {
@@ -99,6 +141,13 @@ namespace MovieAPI.Controllers
             return Ok(comments);
         }
 
+
+        /// <summary>
+        /// Adds a comment to a movie.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <param name="commentToAdd">The comment data to add.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize]
         [HttpPost("write-comment/{movieId}")]
         public async Task<IActionResult> CommentMovie(int movieId, AddCommentDTO commentToAdd)
@@ -123,6 +172,13 @@ namespace MovieAPI.Controllers
             return null;
         }
 
+
+        /// <summary>
+        /// Rates a movie.
+        /// </summary>
+        /// <param name="movieId">The ID of the movie.</param>
+        /// <param name="rating">The rating value.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize]
         [HttpPost("rate-movie/{movieId}")]
         public async Task<IActionResult> RateMovie(int movieId, int rating)
@@ -149,6 +205,13 @@ namespace MovieAPI.Controllers
             return null;
         }
 
+
+        /// <summary>
+        /// Updates a comment in the database.
+        /// </summary>
+        /// <param name="commentId">The ID of the comment to update.</param>
+        /// <param name="updates">The updated comment data.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize]
         [HttpPut("update-comment")]
         public async Task<IActionResult> UpdateComment(int commentId, UpdateCommentDTO updates)
@@ -166,6 +229,12 @@ namespace MovieAPI.Controllers
             return BadRequest();
         }
 
+
+        /// <summary>
+        /// Deletes a comment from the database.
+        /// </summary>
+        /// <param name="commentid">The ID of the comment to delete.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize]
         [HttpDelete("delete-comment")]
         public async Task<IActionResult> DeleteComment(int commentid)
@@ -177,6 +246,14 @@ namespace MovieAPI.Controllers
             }
             return BadRequest();
         }
+
+
+        /// <summary>
+        /// Updates a review in the database.
+        /// </summary>
+        /// <param name="ratingId">The ID of the rating to update.</param>
+        /// <param name="rating">The updated rating value.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         //[Authorize]
         [HttpPut("update-rating")]
         public async Task<IActionResult> UpdateReview(int ratingId, int rating)
@@ -195,6 +272,12 @@ namespace MovieAPI.Controllers
             return BadRequest();
         }
 
+
+        /// <summary>
+        /// Searches for movies by name in the database.
+        /// </summary>
+        /// <param name="movieName">The name of the movie to search for.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("search-movie-by-name")]
         public async Task<IActionResult> SearchMovieByName(string movieName)
         {
@@ -208,6 +291,11 @@ namespace MovieAPI.Controllers
             return Ok(movies);
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by release date in ascending order.
+        /// </summary>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("order-movie-by-release-date-asc")]
         public async Task<IActionResult> OrderMovieByReleaseDateAsc()
         {
@@ -221,6 +309,11 @@ namespace MovieAPI.Controllers
             return Ok(movie);
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by release date in descending order.
+        /// </summary>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("order-movie-by-release-date-desc")]
         public async Task<IActionResult> OrderMovieByReleaseDateDesc()
         {
@@ -234,6 +327,11 @@ namespace MovieAPI.Controllers
             return Ok(movie);
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by name in ascending order.
+        /// </summary>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("order-movie-by-name-asc")]
         public async Task<IActionResult> OrderMovieByNameAsc()
         {
@@ -247,6 +345,11 @@ namespace MovieAPI.Controllers
             return Ok(movie);
         }
 
+
+        /// <summary>
+        /// Retrieves movies ordered by name in descending order.
+        /// </summary>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpGet("order-movie-by-name-desc")]
         public async Task<IActionResult> OrderMovieByNameDesc()
         {
@@ -260,6 +363,13 @@ namespace MovieAPI.Controllers
             return Ok(movie);
         }
 
+
+        /// <summary>
+        /// Deletes an image associated with a movie from the database.
+        /// </summary>
+        /// <param name="imageId">The ID of the image to delete.</param>
+        /// <param name="movieId">The ID of the movie associated with the image.</param>
+        /// <returns>An IActionResult representing the HTTP response.</returns>
         [HttpDelete("delete-image")]
         public async Task<IActionResult> DeleteImageById(int imageId, int movieId)
         {
@@ -270,6 +380,5 @@ namespace MovieAPI.Controllers
             }
             return BadRequest();
         }
-
     }
 }

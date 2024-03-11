@@ -5,6 +5,7 @@ using MovieAPI.Data.Models;
 
 namespace MovieAPI.Data
 {
+    //Inheriting the IdentityDbContext<ApplicationUser> to have access to the user object
     public class DataContext : IdentityDbContext<ApplicationUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -26,6 +27,8 @@ namespace MovieAPI.Data
             builder.Entity<MoviesRatings>().HasKey(x => new { x.MovieId, x.RatingId });
             builder.Entity<MoviesImages>().HasKey(x => new { x.MovieId, x.ImageId });
 
+
+            //Configure the 2 differenct roles
             List<IdentityRole> roles = new List<IdentityRole>()
             {
                 new IdentityRole()

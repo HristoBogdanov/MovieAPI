@@ -2,6 +2,7 @@
 
 namespace MovieAPI.Data.Models
 {
+    //By inheriting the IdntityUser class, we will have the email and password fields by default
     public class ApplicationUser : IdentityUser
     {
         public ApplicationUser()
