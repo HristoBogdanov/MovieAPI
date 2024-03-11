@@ -130,8 +130,14 @@ namespace MovieAPI.Services
         public async Task<bool> DeleteMovie(int id)
         {
             var movie = await context.Movies.FindAsync(id);
-            if(movie != null) 
+            var movieImages = await context.MoviesImages.Where(x => x.MovieId == id).ToListAsync();
+            if (movie != null)
             {
+                if (movieImages.Any())
+                {
+                    context.MoviesImages.RemoveRange(movieImages);
+                }
+
                 context.Remove(movie);
                 await context.SaveChangesAsync();
                 return true;

@@ -18,7 +18,6 @@ namespace MovieAPI.Controllers
             this.movieService = movieService;
         }
 
-        [Authorize]
         [HttpGet("get-all-movies")]
         public async Task<IActionResult> GetAllMovies()
         {
